@@ -1,0 +1,65 @@
+camel:
+  component:
+    servlet:
+      enabled: true
+  dataformat:
+    json-jackson:
+      auto-discover-object-mapper: true #Activated to use the correct (de)serializer for OffsetDateTime.
+
+
+server:
+  port: 8080
+
+backend:
+  url:
+    get: ${GET_URL}
+
+#spring:
+#  application:
+#    name: swagger2camel-maven-plugin
+#  jackson:
+#    visibility:
+#      getter: NONE
+#  mvc:
+#    servlet:
+#      path: /casalgg/v1/api
+#  profiles:
+#    active: local
+
+#management:
+#  endpoint:
+#    health:
+#      show-details: "ALWAYS'"
+#      probes:
+#        enabled: true
+#
+#oidc:
+#  security:
+#    config:
+#      enable: true
+#      whiteListAccessUrls:
+#        - ${spring.mvc.servlet.path}/actuator/**
+#        - ${spring.mvc.servlet.path}/swagger-ui/**
+#        - ${spring.mvc.servlet.path}/webjars/swagger-ui/**
+#        - ${camel.component.servlet.mapping.contextPath}/swagger
+#      authorization-rules:
+#        swagger2camel-mavel-plugin:
+#          rules:
+#            - provider: resource-owner
+#              paths:
+#                - /**
+
+logging:
+  group:
+    web: org.springframework.core.codec, org.springframework.http, org.springframework.web
+    spring: org.springframework.core.env
+    servlet: org.springframework.boot.web, org.apache.catalina, org.apache.coyote, org.apache.tomcat
+    data: org.springframework.jdbc.core, org.hibernate.sql, org.springframework.orm.jpa, com.zaxxer.hikari, org.hibernate, org.jooq.tools.LoggerListener
+    app: com.santander.bpo
+  level:
+    root: ${LOG_ROOT:DEBUG}
+    spring: ${LOG_SPRING:DEBUG}
+    app: ${LOG_APP:DEBUG}
+    servlet: ${LOG_SERVLET:DEBUG}
+    web: ${LOG_WEB:DEBUG}
+    data: ${LOG_DATA:DEBUG}
