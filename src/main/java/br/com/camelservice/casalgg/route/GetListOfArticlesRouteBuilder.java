@@ -28,23 +28,33 @@ public class GetListOfArticlesRouteBuilder extends RouteBuilder {
                 .doTry()
                 .routeId("id-To_GetListOfPeople")
                 .log(LoggingLevel.INFO, "starting route get list of people")
-                .removeHeaders("CamelHttp*")
-                .removeHeaders("Authorization")
-//                .process(recoverObjectIdProcessor)
 
-                .setHeader(Exchange.CONTENT_TYPE, constant(MediaType.APPLICATION_JSON_VALUE))
-                .setHeader(Exchange.HTTP_METHOD, constant(HttpMethod.GET))
-//                .setHeader(Exchange.HTTP_PATH, simple("/${header.channel_id}/keys/${header.key_cod}"))
-                .removeHeader(Exchange.HTTP_URI)
-                .to(urlGet)
-                .removeHeaders("CamelHttp*")
-                .unmarshal().json(JsonLibrary.Jackson, Object.class)
+                .setBody(simple("SELECT \n" +
+                        "    sessao.titulo AS Sessao, \n" +
+                        "    subsessao.titulo AS 'Sub-Sessao', \n" +
+                        "    artigo.titulo AS Artigo, \n" +
+                        "    artigo.conteudo AS Conteudo, \n" +
+                        "    artigo.autor AS Autor, \n" +
+                        "    artigo.data_publicacao AS 'Data de Publicacao'\n" +
+                        "FROM \n" +
+                        "    sessao\n" +
+                        "JOIN \n" +
+                        "    subsessao ON sessao.id_sessao = subsessao.id_sessao\n" +
+                        "JOIN \n" +
+                        "    artigo ON subsessao.id_subsessao = artigo.id_subsessao\n" +
+                        "ORDER BY \n" +
+                        "    sessao.titulo, subsessao.titulo, artigo.titulo;"))
+
+                .to("jdbc:myDataSource")
+                .log("Artigo: ${body}")
+
+//                .unmarshal().json(JsonLibrary.Jackson, Object.class)
                 .log("End get")
-//                .process(responseProcessor)
                 .doCatch(Exception.class)
-//                .wireTap(ErrorRouter.ERROR_LOG)
-//                .process(new ErrorMessageProcessor())
+                .log(LoggingLevel.ERROR, "Erro ao executar rota: ${exception.message}")
+                .setBody(constant("Erro ao buscar artigos."))
                 .end();
+
 
     }
 }

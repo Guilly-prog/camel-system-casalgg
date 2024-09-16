@@ -33,8 +33,8 @@ public class MainRestRouteBuilder extends RouteBuilder {
                 .apiProperty("api.title", "casalgg person api")
                 .apiProperty("api.description", "casalgg person")
                 .apiProperty("api.version", "1.0.0")
-                .apiProperty("host", "localhost")
-                .apiProperty("port", "8080")
+//                .apiProperty("host", "localhost")
+//                .apiProperty("port", "8080")
                 .apiProperty("schemes", "http")
 
                 .apiProperty("api.contact.name", "Guilherme Lopes")

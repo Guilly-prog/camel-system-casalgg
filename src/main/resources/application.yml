@@ -6,25 +6,14 @@ camel:
     json-jackson:
       auto-discover-object-mapper: true #Activated to use the correct (de)serializer for OffsetDateTime.
 
-
-server:
-  port: 8080
+spring:
+  datasource:
+    initialize: false
 
 backend:
   url:
     get: ${GET_URL}
 
-#spring:
-#  application:
-#    name: swagger2camel-maven-plugin
-#  jackson:
-#    visibility:
-#      getter: NONE
-#  mvc:
-#    servlet:
-#      path: /casalgg/v1/api
-#  profiles:
-#    active: local
 
 #management:
 #  endpoint:
