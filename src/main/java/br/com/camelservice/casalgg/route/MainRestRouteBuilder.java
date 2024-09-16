@@ -1,7 +1,7 @@
 package br.com.camelservice.casalgg.route;
 
 
-import br.com.camelservice.casalgg.model.Artigo;
+import br.com.camelservice.casalgg.model.Article;
 import br.com.camelservice.casalgg.service.ArtigoService;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -47,15 +47,61 @@ public class MainRestRouteBuilder extends RouteBuilder {
                 .end()
 
                 .get()
-                .id("id-MainRoute-person-getbyid")
-                .description("Retrieve a person by its specific id")
+                .id("id-MainRoute-list-all-articles")
+                .description("Retrieves a list of all articles if their status are 'publicado'")
                 .bindingMode(RestBindingMode.json)
                 .skipBindingOnErrorCode(true)
                 .security("Authorization")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
-                .outType(Artigo.class)
+                .outType(Article.class)
+                .responseMessage()
+                .code(200).message("OK")
+                .endResponseMessage()
+                .responseMessage()
+                .code(400).message("Bad Request")
+                .endResponseMessage()
+                .responseMessage()
+                .code(401).message("Unauthorized")
+                .endResponseMessage()
+                .responseMessage()
+                .code(403).message("Forbidden")
+                .endResponseMessage()
+                .responseMessage()
+                .code(404).message("Not Found")
+                .endResponseMessage()
+                .responseMessage()
+                .code(406).message("Not Acceptable")
+                .endResponseMessage()
+                .responseMessage()
+                .code(415).message("Unsupported Media Type")
+                .endResponseMessage()
+                .responseMessage()
+                .code(422).message("Unprocessable Entity")
+                .endResponseMessage()
+                .responseMessage()
+                .code(500).message("Internal Server Error")
+                .endResponseMessage()
+                .responseMessage()
+                .code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase())
+                .endResponseMessage()
+                .to("direct:getAllArtigos");
+
+        // Get a person by ID
+        rest("/articles/{articlesId}")
+                .securityDefinitions()
+                .apiKey("Authorization", "Bearer [replace with a valid token]").withHeader("Authorization").end()
+                .end()
+
+                .get()
+                .id("id-MainRoute-articles-getbyid")
+                .description("Retrieve an articles by its specific id")
+                .bindingMode(RestBindingMode.json)
+                .skipBindingOnErrorCode(true)
+                .security("Authorization")
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .outType(Article.class)
                 .param()
-                .name("personId")
+                .name("articlesId")
                 .type(RestParamType.path)
                 .dataType("String")
                 .endParam()
@@ -89,8 +135,7 @@ public class MainRestRouteBuilder extends RouteBuilder {
                 .responseMessage()
                 .code(HttpStatus.GATEWAY_TIMEOUT.value()).message(HttpStatus.GATEWAY_TIMEOUT.getReasonPhrase())
                 .endResponseMessage()
-                .to("direct:getAllArtigos");
-
+                .to("direct:TO_ArticlesByIdGET");
 
 //
 //                // Endpoint para recuperar um artigo pelo ID (GET)

@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Artigo {
+public class Article {
 
     @JsonProperty("id")
     private Long id;
